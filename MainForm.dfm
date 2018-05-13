@@ -151,10 +151,22 @@ object Form3: TForm3
         Caption = 'Proportional'
         OnClick = Proportional1Click
       end
+      object ZoomIn1: TMenuItem
+        Caption = 'Zoom In'
+        OnClick = ZoomIn1Click
+      end
+      object ZoomOut1: TMenuItem
+        Caption = 'Zoom Out'
+        OnClick = ZoomOut1Click
+      end
     end
     object Reset1: TMenuItem
       Caption = 'Reset'
       OnClick = Reset1Click
+    end
+    object About1: TMenuItem
+      Caption = 'About'
+      OnClick = About1Click
     end
   end
   object OpenDialogLoadImage: TOpenDialog

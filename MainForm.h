@@ -53,6 +53,9 @@ __published:	// IDE-managed Components
 	TMenuItem *Stretch1;
 	TMenuItem *Proportional1;
 	TMenuItem *Reset1;
+	TMenuItem *ZoomIn1;
+	TMenuItem *ZoomOut1;
+	TMenuItem *About1;
 	void __fastcall LoadClick(TObject *Sender);
 	void __fastcall Mirror1Click(TObject *Sender);
 	void __fastcall Flip1Click(TObject *Sender);
@@ -73,6 +76,9 @@ __published:	// IDE-managed Components
 	void __fastcall Proportional1Click(TObject *Sender);
 	void __fastcall Stretch1Click(TObject *Sender);
 	void __fastcall Reset1Click(TObject *Sender);
+	void __fastcall ZoomIn1Click(TObject *Sender);
+	void __fastcall ZoomOut1Click(TObject *Sender);
+	void __fastcall About1Click(TObject *Sender);
 
 private:	// User declarations
 public:		// User declarations

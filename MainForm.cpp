@@ -10,6 +10,8 @@
 #pragma resource "*.dfm"
 TForm3 *Form3;
 Graphics::TBitmap *saveNormalState   = new Graphics::TBitmap;
+int saveNormalHeight;
+int saveNormalWidth;
 
 //---------------------------------------------------------------------------
 __fastcall TForm3::TForm3(TComponent* Owner)
@@ -43,6 +45,8 @@ void __fastcall TForm3::LoadClick(TObject *Sender)
 				MainImageContainer->Picture->Bitmap->LoadFromFile(OpenDialogLoadImage->FileName);
 			saveNormalState->Assign( MainImageContainer->Picture->Bitmap );
 			saveNormalState->PixelFormat  =  MainImageContainer->Picture->Bitmap->PixelFormat;
+			saveNormalHeight = MainImageContainer->Height;
+            saveNormalWidth = MainImageContainer->Width;
 		  }
 
 }
@@ -592,6 +596,34 @@ void __fastcall TForm3::Stretch1Click(TObject *Sender)
 void __fastcall TForm3::Reset1Click(TObject *Sender)
 {
 		MainImageContainer->Picture->Bitmap =     saveNormalState;
+		MainImageContainer->Height = saveNormalHeight;
+        MainImageContainer->Width = saveNormalWidth;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::ZoomIn1Click(TObject *Sender)
+{
+  MainImageContainer->Height += 30;
+  int computedWidth = (MainImageContainer->Width * 30) / 30;
+  MainImageContainer->Width += computedWidth;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::ZoomOut1Click(TObject *Sender)
+{
+  MainImageContainer->Height -= 30;
+  int computedHeight = (MainImageContainer->Height * 30) / 30;
+  MainImageContainer->Width -= computedHeight;
+}
+//---------------------------------------------------------------------------
+
+
+
+
+void __fastcall TForm3::About1Click(TObject *Sender)
+{
+	TForm1 *aboutForm = new TForm1(this);
+    aboutForm ->ShowModal();
 }
 //---------------------------------------------------------------------------
 
