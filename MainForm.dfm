@@ -2,8 +2,8 @@ object Form3: TForm3
   Left = 0
   Top = 0
   Caption = 'MiniPS'
-  ClientHeight = 540
-  ClientWidth = 800
+  ClientHeight = 480
+  ClientWidth = 865
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,11 +15,50 @@ object Form3: TForm3
   PixelsPerInch = 96
   TextHeight = 13
   object MainImageContainer: TImage
-    Left = 216
-    Top = 96
-    Width = 385
-    Height = 345
+    Left = 0
+    Top = 0
+    Width = 601
+    Height = 481
     Proportional = True
+  end
+  object HistogramChart: TChart
+    Left = 607
+    Top = 0
+    Width = 257
+    Height = 177
+    Title.Text.Strings = (
+      'Histogram')
+    TabOrder = 0
+    Visible = False
+    DefaultCanvas = 'TGDIPlusCanvas'
+    ColorPaletteIndex = 13
+    object Series1: TFastLineSeries
+      SeriesColor = clRed
+      Title = 'Red'
+      LinePen.Color = clRed
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+    end
+    object Series2: TFastLineSeries
+      SeriesColor = clGreen
+      Title = 'Green'
+      LinePen.Color = clGreen
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+    end
+    object Series3: TFastLineSeries
+      SeriesColor = clBlue
+      Title = 'Blue'
+      LinePen.Color = clBlue
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+    end
   end
   object MainMenu: TMainMenu
     object File: TMenuItem
@@ -56,6 +95,25 @@ object Form3: TForm3
         OnClick = RotateClockwise1801Click
       end
     end
+    object Color1: TMenuItem
+      Caption = 'Color'
+      object RedChannel1: TMenuItem
+        Caption = 'Red Channel'
+        OnClick = RedChannel1Click
+      end
+      object GreenChannel1: TMenuItem
+        Caption = 'Green Channel'
+        OnClick = GreenChannel1Click
+      end
+      object BlueChannel1: TMenuItem
+        Caption = 'Blue Channel'
+        OnClick = BlueChannel1Click
+      end
+      object Grayscale1: TMenuItem
+        Caption = 'Grayscale'
+        OnClick = Grayscale1Click
+      end
+    end
     object Filter1: TMenuItem
       Caption = 'Filter'
       object None1: TMenuItem
@@ -79,14 +137,30 @@ object Form3: TForm3
       Caption = 'View'
       object Histogram1: TMenuItem
         Caption = 'Histogram'
+        OnClick = Histogram1Click
       end
+      object RecomputeHistogram1: TMenuItem
+        Caption = 'Recompute Histogram'
+        OnClick = RecomputeHistogram1Click
+      end
+      object Stretch1: TMenuItem
+        Caption = 'Stretch'
+        OnClick = Stretch1Click
+      end
+      object Proportional1: TMenuItem
+        Caption = 'Proportional'
+        OnClick = Proportional1Click
+      end
+    end
+    object Reset1: TMenuItem
+      Caption = 'Reset'
+      OnClick = Reset1Click
     end
   end
   object OpenDialogLoadImage: TOpenDialog
     Left = 32
   end
   object SaveDialog1: TSaveDialog
-    Left = 104
-    Top = 16
+    Left = 64
   end
 end
