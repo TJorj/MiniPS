@@ -2,7 +2,7 @@ object Form3: TForm3
   Left = 0
   Top = 0
   Caption = 'MiniPS'
-  ClientHeight = 480
+  ClientHeight = 460
   ClientWidth = 865
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

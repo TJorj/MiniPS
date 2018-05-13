@@ -12,6 +12,8 @@ TForm3 *Form3;
 Graphics::TBitmap *saveNormalState   = new Graphics::TBitmap;
 int saveNormalHeight;
 int saveNormalWidth;
+bool saveProportional;
+bool saveStretch;
 
 //---------------------------------------------------------------------------
 __fastcall TForm3::TForm3(TComponent* Owner)
@@ -43,10 +45,13 @@ void __fastcall TForm3::LoadClick(TObject *Sender)
             }
             else if (Ext.AnsiPos("bmp") > 0)
 				MainImageContainer->Picture->Bitmap->LoadFromFile(OpenDialogLoadImage->FileName);
+            //save initial image state
 			saveNormalState->Assign( MainImageContainer->Picture->Bitmap );
 			saveNormalState->PixelFormat  =  MainImageContainer->Picture->Bitmap->PixelFormat;
 			saveNormalHeight = MainImageContainer->Height;
-            saveNormalWidth = MainImageContainer->Width;
+			saveNormalWidth = MainImageContainer->Width;
+            saveProportional = MainImageContainer->Proportional;
+			saveStretch = MainImageContainer->Stretch;
 		  }
 
 }
@@ -65,6 +70,7 @@ void __fastcall TForm3::Mirror1Click(TObject *Sender)
 
         TColor color;
 
+        //mirrors each pixel
         for( int y=0; y<source->Height; y++ )
                 {
                     for (int x=0; x<source->Width; x++)
@@ -90,6 +96,7 @@ void __fastcall TForm3::Flip1Click(TObject *Sender)
 
         TColor color;
 
+        //flips each pixel
         for( int y=0; y<source->Height; y++ )
                 {
                     for (int x=0; x<source->Width; x++)
@@ -116,7 +123,8 @@ void __fastcall TForm3::Sepia1Click(TObject *Sender)
         dest->Assign(source);
 
         RGBTRIPLE* pixels;
-        TColor color;
+		TColor color;
+        //creates sepia effect by recoloring each pixel
         for( int y=0; y<source->Height; y++ )
                 {
                     pixels = (RGBTRIPLE*)source->ScanLine[y];
@@ -143,7 +151,7 @@ void __fastcall TForm3::Sepia1Click(TObject *Sender)
 
 void __fastcall TForm3::Negative1Click(TObject *Sender)
 {
-        	Graphics::TBitmap *source   = new Graphics::TBitmap;
+		Graphics::TBitmap *source   = new Graphics::TBitmap;
         source->Assign( MainImageContainer->Picture->Bitmap );
 		source->PixelFormat  =  MainImageContainer->Picture->Bitmap->PixelFormat;
 
@@ -154,7 +162,9 @@ void __fastcall TForm3::Negative1Click(TObject *Sender)
         dest->Assign(source);
 
         RGBTRIPLE* pixels;
-        TColor color;
+		TColor color;
+
+        //creates negative for each pixel
         for( int y=0; y<source->Height; y++ )
                 {
                     pixels = (RGBTRIPLE*)source->ScanLine[y];
@@ -186,7 +196,9 @@ void __fastcall TForm3::Metalic1Click(TObject *Sender)
         TColor color;
         int R,G,B;
         int level=4;
-        int mtab[256];
+		int mtab[256];
+
+        //craetes metal for each pixel
         for( int j=0; j<255; j++ )
                 {
                     for (int k=0; k<256; k+= level)
@@ -218,6 +230,7 @@ void __fastcall TForm3::Metalic1Click(TObject *Sender)
 
 void __fastcall TForm3::None1Click(TObject *Sender)
 {
+    //removes filters by going back to initial image state
 	MainImageContainer->Picture->Bitmap = saveNormalState;
 }
 //---------------------------------------------------------------------------
@@ -236,7 +249,7 @@ void __fastcall TForm3::RotateClockwise901Click(TObject *Sender)
 		RGBTRIPLE* pixels;
 		TColor color;
 
-		//rotate by 90‹
+		//rotate by 90
 
 		dest->Width=source->Height;
 		dest->Height=source->Width;
@@ -334,7 +347,7 @@ void __fastcall TForm3::NewClick(TObject *Sender)
         RGBTRIPLE* pixels;
         TColor color;
 
-
+          //creates new blank image
 		for( int y=0; y<dest->Height; y++ )
 				{
 
@@ -370,7 +383,7 @@ void __fastcall TForm3::Histogram1Click(TObject *Sender)
 			RGBTRIPLE* pixels;
 			TColor color;
 
-			//Calcul histograma SURSA
+			//Calcul histograma
 		  for( int y=0; y<source->Height; y++ )
 			{
 			   pixels = (RGBTRIPLE*)source->ScanLine[y];
@@ -391,7 +404,7 @@ void __fastcall TForm3::Histogram1Click(TObject *Sender)
 			 }
 			 delete source;
 
-			//Desenare histograma SURSA
+			//Desenare histograma
 			 HistogramChart->Series[0]->Clear();
 			 HistogramChart->Series[1]->Clear();
 			 HistogramChart->Series[2]->Clear();
@@ -428,6 +441,7 @@ void __fastcall TForm3::RedChannel1Click(TObject *Sender)
 
 	RGBTRIPLE* pixels;
 	TColor color;
+    //creates red channel for each pixel
     for( int y=0; y<source->Height; y++ )
                 {
                     pixels = (RGBTRIPLE*)source->ScanLine[y];
@@ -452,13 +466,13 @@ void __fastcall TForm3::GreenChannel1Click(TObject *Sender)
 
 	RGBTRIPLE* pixels;
 	TColor color;
+    //creates green channel for each pixel
     for( int y=0; y<source->Height; y++ )
                 {
                     pixels = (RGBTRIPLE*)source->ScanLine[y];
                     for (int x=0; x<source->Width; x++)
                        dest->Canvas->Pixels[x][y] = TColor(RGB(0, pixels[x].rgbtGreen, 0));
                 }
-                //Asigneaza bitmapul destinatie inapoi catre Image1 si "curata"
                 MainImageContainer->Picture->Bitmap = dest;
                 delete dest;  delete source;
 }
@@ -477,13 +491,14 @@ void __fastcall TForm3::BlueChannel1Click(TObject *Sender)
 
 	RGBTRIPLE* pixels;
 	TColor color;
+
+	//creates blue channel for each pixel
     for( int y=0; y<source->Height; y++ )
                 {
                     pixels = (RGBTRIPLE*)source->ScanLine[y];
                     for (int x=0; x<source->Width; x++)
                        dest->Canvas->Pixels[x][y] = TColor(RGB(0, 0, pixels[x].rgbtBlue));
                 }
-                //Asigneaza bitmapul destinatie inapoi catre Image1 si "curata"
                 MainImageContainer->Picture->Bitmap = dest;
                 delete dest;  delete source;
 }
@@ -504,12 +519,12 @@ void __fastcall TForm3::Grayscale1Click(TObject *Sender)
 
 	RGBTRIPLE* pixels;
 	TColor color;
-
     for( int y=0; y<source->Height; y++ )
                 {
                     pixels = (RGBTRIPLE*)source->ScanLine[y];
                     for (int x=0; x<source->Width; x++)
-                    {
+					{
+						//calculates light level for each pixel in grayscale
                        double L = 0.2126 * pixels[x].rgbtRed + 0.7152 * pixels[x].rgbtGreen + 0.0722 * pixels[x].rgbtBlue;
                        dest->Canvas->Pixels[x][y] = TColor(RGB(L,  L, L));
                     }
@@ -538,7 +553,7 @@ void __fastcall TForm3::RecomputeHistogram1Click(TObject *Sender)
 			RGBTRIPLE* pixels;
 			TColor color;
 
-			//Calcul histograma SURSA
+
 		  for( int y=0; y<source->Height; y++ )
 			{
 			   pixels = (RGBTRIPLE*)source->ScanLine[y];
@@ -559,7 +574,6 @@ void __fastcall TForm3::RecomputeHistogram1Click(TObject *Sender)
 			 }
 			 delete source;
 
-			//Desenare histograma SURSA
 			 HistogramChart->Series[0]->Clear();
 			 HistogramChart->Series[1]->Clear();
 			 HistogramChart->Series[2]->Clear();
@@ -578,7 +592,7 @@ void __fastcall TForm3::RecomputeHistogram1Click(TObject *Sender)
 
 void __fastcall TForm3::Proportional1Click(TObject *Sender)
 {
-	MainImageContainer->Proportional = ! MainImageContainer->Proportional;
+		MainImageContainer->Proportional = ! MainImageContainer->Proportional;
 
 }
 //---------------------------------------------------------------------------
@@ -595,9 +609,12 @@ void __fastcall TForm3::Stretch1Click(TObject *Sender)
 
 void __fastcall TForm3::Reset1Click(TObject *Sender)
 {
+	//resets image to initial state
 		MainImageContainer->Picture->Bitmap =     saveNormalState;
 		MainImageContainer->Height = saveNormalHeight;
-        MainImageContainer->Width = saveNormalWidth;
+		MainImageContainer->Width = saveNormalWidth;
+		MainImageContainer->Stretch = saveStretch;
+        MainImageContainer->Proportional = saveProportional;
 }
 //---------------------------------------------------------------------------
 
